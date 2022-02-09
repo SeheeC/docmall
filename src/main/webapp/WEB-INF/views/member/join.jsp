@@ -13,13 +13,6 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/pricing/">
 
     
-
-    <!-- Bootstrap core CSS -->
-    
-    <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://getbootstrap.com/docs/4.6/dist/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
-    
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -55,70 +48,128 @@
   
   <!-- 회원가입 폼 작업 -->
   <h3>회원가입 폼</h3>
-  <form>
+  <form action="/member/join" method="post">
   <div class="form-row">
   	<div class="col-md-10">
-	    <label for="exampleInputEmail1">아이디</label>
+	    <label for="mbsp_id">아이디</label>
+	    <input type="text" class="form-control" id="mbsp_id" name="mbsp_id">
     </div>
-    <div class="col-md-10">
-	    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    </div>
+    
     <div class="col-md-2">
-	    <button type="button" class="form-control">중복 체크</button>
+      	<label id="idUseState">&nbsp;</label>
+	    <button type="button" class="form-control" id="btnUseIdChk">중복 체크</button>
   	</div>  
   </div>
+  
   <div class="form-group">
-    <label for="exampleInputPassword1">비밀번호</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
+    <label for="mbsp_password">비밀번호</label>
+    <input type="password" class="form-control" id="mbsp_password" name="mbsp_password">
   </div>
+  
   <div class="form-group">
     <label for="exampleInputEmail1">비밀번호 확인</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">이름</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">우편번호</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
+    <input type="text" class="form-control" id="exampleInputEmail1">
   </div>
   
+  <div class="form-group">
+    <label for="mbsp_name">이름</label>
+    <input type="text" class="form-control" id="mbsp_name" name="mbsp_name">
+  </div>
+  
+<div class="form-row">
+   	<div class="col-md-6">
+	    <label for="mbsp_email">이메일</label>
+	    <input type="text" class="form-control" id="mbsp_email" name="mbsp_email">
+    </div>
+    
+    <div class="col-md-2">
+      	<label id="btnMailAuthConfirm">메일확인바랍니다</label>
+	    <button type="button" class="form-control" id="btnMailAuthReq">메일인증요청</button>
+  	</div>  
+  
+    <div class="col-md-2">
+      	<label id="btnMailAuthConfirm">메일인증코드입력</label>
+	    <input type="text" class="form-control" id="btnMailAuthConfirm"></input>
+  	</div>  
+  	
+  	<div class="col-md-2">
+      	<label id="&nbsp;"></label>
+	    <button type="button" class="form-control" id="btnMailAuthConfirm">메일인증확인</button>
+  	</div>
+</div>
+
    <div class="form-row">
     <div class="col-md-5">
-      <label for="validationTooltip03">기본주소</label>
-      <input type="text" class="form-control" id="validationTooltip03" required>
+      <label for="mbsp_addr">기본주소</label>
+      <input type="text" class="form-control" id="mbsp_addr" name="mbsp_addr" required>
       <div class="invalid-tooltip">
         Please provide a valid city.
       </div>
     </div>
+   
     <div class="col-md-5">
-      <label for="validationTooltip03">나머지주소</label>
-      <input type="text" class="form-control" id="validationTooltip03" required>
+      <label for="mbsp_deaddr">나머지주소</label>
+      <input type="text" class="form-control" id="mbsp_deaddr" name="mbsp_deaddr" required>
       <div class="invalid-tooltip">
         Please provide a valid city.
       </div>
     </div>
+    
     <div class="col-md-2">
-      <label for="validationTooltip05">우편번호</label>
-      <input type="text" class="form-control" id="validationTooltip05" required>
-      <div class="invalid-tooltip">
-        Please provide a valid zip.
-      </div>
+      <label for="mbsp_zipcode">우편번호</label>
+      <input type="text" class="form-control" id="mbsp_zipcode" name="mbsp_zipcode" required>
     </div>
    </div>
-
-  <div class="form-group form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">메일수신여부</label>
+   
+  <div class="form-group">
+    <label for="mbsp_phone">전화번호</label>
+    <input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone">
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  
+  <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="mbsp_receive" name="mbsp_receive" value="Y">
+    <label class="form-check-label" for="mbsp_receive">메일수신여부</label>
+  </div>
+  <button type="submit" class="btn btn-primary">회원 가입</button>
 </form>
   
-  
-
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>
+
+<script>
+  $(document).ready(function() {
+    // 아이디 중복 체크
+    $("#btnUseIdChk").on("click", function(){
+
+      let mbsp_id = $("#mbsp_id");
+
+      if(mbsp_id.val() == "" || mbsp_id.val() == null){
+        alert("아이디를 입력하세요.");
+        mbsp_id.focus();
+        return;
+      }
+
+      $.ajax({
+        url: '',
+        type: 'get',
+        dataType: 'text',
+        data: {mbsp_id : mbsp_id.val()},
+        success: function(data){
+
+          $("#idUseState").css("color", "red");
+
+          if(data == "Y"){
+            $("#idUseState").html("아이디 사용 가능");
+          }else if(data == "N"){
+            mbsp_id.val("");
+            $("#idUseState").html("아이디 사용 불가능");
+          }
+        }
+
+      });
+    });
+  });
+</script>
 
 
     

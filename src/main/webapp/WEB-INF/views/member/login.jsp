@@ -54,9 +54,42 @@
 <div class="container">
   
   <!-- 회원가입 폼 작업 -->
-  <h3>로그인 폼</h3>
-  
-  
+
+  <div class="row">
+    <h3>로그인 폼</h3>
+    <div class="container">
+      <form>
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">ID</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="ID">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Password">
+          </div>
+        </div>
+
+        <!--<div class="form-group row">
+          <label class="col-sm-2"></label>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <label class="form-check-label">
+            <input class="form-check-input" type="checkbox"> Register
+          </label>
+            </div>
+          </div>
+        </div>  -->
+        <div class="form-group row">
+          <div class="offset-sm-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>

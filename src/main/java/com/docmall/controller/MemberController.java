@@ -1,9 +1,21 @@
 package com.docmall.controller;
 
+import javax.inject.Inject;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.docmall.domain.MemberVO;
+import com.docmall.service.MemberService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -13,7 +25,12 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/member/*")
 @Controller
 public class MemberController {
-
+	
+	@Inject
+	private PasswordEncoder cryptPassEnc;
+	
+	@Inject
+	private MemberService service;
 	// 주요기능 : 회원기능
 	
 	
@@ -25,15 +42,37 @@ public class MemberController {
 	
 	//회원가입저장
 	@PostMapping("/join")
-	public String joinOk() throws Exception{
+	public String joinOk(MemberVO vo, RedirectAttributes rttr) throws Exception{
 		
+		// 비밀번호 암호화. (spring security 기능)
+		// StringUtils.insEmpty(매개변수) : 매개 변수의 값이 null 또는 빈 문자열일 경우를 확인하는 기능.
 		
-		return "";
+		vo.setMbsp_password(cryptPassEnc.encode(vo.getMbsp_password()));
+		
+		vo.setMbsp_receive(!StringUtils.isEmpty(vo.getMbsp_receive()) ? "Y" : "N");
+		log.info("MemberVO: vo");
+		
+		service.join(vo);
+
+		return "redirect:/member/login";
 	}
 	
 	
 	//아이디중복체크
-	
+	@ResponseBody
+	@GetMapping("/checkID")
+	public ResponseEntity<String> checkID(@RequestParam String mbsp_id) throws Exception{
+		// db 작업이 있으면 예외 처리를 해야 함
+		
+		String result = "";
+		ResponseEntity<String> entity = null;
+		
+		result = StringUtils.isEmpty(service.checkID(mbsp_id)) ? "Y" : "N";
+		
+		entity = new ResponseEntity<String>(result, HttpStatus.OK);
+		
+		return entity;
+	}
 	
 	
 	
