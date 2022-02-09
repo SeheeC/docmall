@@ -1,9 +1,13 @@
 package com.docmall.controller;
 
 import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.docmall.domain.EmailDTO;
 import com.docmall.domain.MemberVO;
 import com.docmall.service.MemberService;
 
@@ -33,6 +38,8 @@ public class MemberController {
 	private MemberService service;
 	// 주요기능 : 회원기능
 	
+	private JavaMailSender mailSender;
+	// root-context org...JavaMailSenderImpl class의 mailSender 기능 사용
 	
 	//회원가입 폼 : /member/join -> jsp파일명
 	@GetMapping("/join")
@@ -75,8 +82,53 @@ public class MemberController {
 	}
 	
 	
+	//메일 인증 요청
+	@ResponseBody
+	@GetMapping("/sendMailAuth")
+	public ResponseEntity<String> sendMailAuth(@RequestParam("mbsp_email") String mbsp_email){
+		
+		ResponseEntity<String> entity = null;
+		
+		String authCode = makeAuthCode();
+		
+		EmailDTO dto = new EmailDTO("docmall", "doccomsa@nate.com", mbsp_email, "docmall 인증 메일", authCode);
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		
+		try {
+			// 수신자 설정
+			message.addRecipient(RecipientType.TO, new InternetAddress(mbsp_email));
+			// 발신자 설정(이메일, 이름)
+			message.addFrom(new InternetAddress[] {new InternetAddress(dto.getSenderMail(), dto.getSenderName())});
+			// 제목
+			message.setSubject(dto.getSubject(), "UTF-8");
+			// 본문
+			message.setText(dto.getMessage(), "UTF-8");
+			
+			mailSender.send(message);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			
+			entity = new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
+	}
 	
-	
+	// 회원 가입 시 메일 인증 코드 생성
+	private String makeAuthCode() {
+		
+		String authCode = "";
+
+		
+		for(int i=0; i<6; i++) {
+			authCode += ((int)(Math.random() * 9) + 1);
+		}
+		
+		return null;
+	}
+
 	//회원수정 폼
 	@GetMapping("/modify")
 	public void modify() {

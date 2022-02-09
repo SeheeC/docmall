@@ -67,11 +67,12 @@
 	 
 	<!-- javax.mail.internet.MimeMessage 를 사용하기위하여 필요함. 메일내용을 담당-->
 	<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+	<!-- https://myaccount.google.com/security : 보안 수준이 낮은 앱 액세스 허용 설정 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
-		<property name="username" value="실제 관리자 계정" />
-		<property name="password" value="실제 관리자 " />
+		<property name="username" value="shhh0009@gmail.com" />
+		<property name="password" value="tpgml9651" />
 		<property name="javaMailProperties">
 		<props>
 			<prop key="mail.smtp.auth">true</prop>

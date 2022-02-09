@@ -11,14 +11,6 @@
     <title>Pricing example · Bootstrap v4.6</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/pricing/">
-
-    
-
-    <!-- Bootstrap core CSS -->
-    
-    <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://getbootstrap.com/docs/4.6/dist/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
     
     <style>
       .bd-placeholder-img {
@@ -53,26 +45,26 @@
  -->
 <div class="container">
   
-  <!-- 회원가입 폼 작업 -->
 
+  
   <div class="row">
     <h3>로그인 폼</h3>
     <div class="container">
       <form>
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">ID</label>
+          <label for="mbsp_id" class="col-sm-2 col-form-label">ID</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="ID">
           </div>
         </div>
         <div class="form-group row">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+          <label for="mbsp_password" class="col-sm-2 col-form-label">Password</label>
           <div class="col-sm-10">
             <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Password">
           </div>
         </div>
-
-        <!--<div class="form-group row">
+		<!-- 
+        <div class="form-group row">
           <label class="col-sm-2"></label>
           <div class="col-sm-10">
             <div class="form-check">
@@ -81,7 +73,8 @@
           </label>
             </div>
           </div>
-        </div>  -->
+        </div>
+         -->
         <div class="form-group row">
           <div class="offset-sm-2 col-sm-10">
             <button type="submit" class="btn btn-primary">Sign in</button>
@@ -90,6 +83,7 @@
       </form>
     </div>
   </div>
+  
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>
