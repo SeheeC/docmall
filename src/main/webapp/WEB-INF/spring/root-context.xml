@@ -23,7 +23,7 @@
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />-->
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" /> 
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe" />
-		<property name="username" value="spring" />
+		<property name="username" value="ora_user" />
 		<property name="password" value="1234" />
 	</bean>
 	
@@ -49,17 +49,21 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
 	<!-- AOP 관련설정 -->
+	<!-- 
 	<context:annotation-config></context:annotation-config>
-	<context:component-scan base-package="com.docmall.aop"/>
+	<context:component-scan base-package="com.doccomsa.aop"/>
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	 -->
 	
-	
-	<mybatis-spring:scan base-package="com.docmall.mapper"/>
-	<context:component-scan base-package="com.docmall.service"/>
-	
+	<!-- 
+	<mybatis-spring:scan base-package="com.doccomsa.mapper"/>
+	<context:component-scan base-package="com.doccomsa.service"/>
+	 -->
 	<!-- 스케줄링 작업을 위한 설정 -->
+	<!-- 
 	<task:annotation-driven/>
-	<context:component-scan base-package="com.docmall.task"/>
+	<context:component-scan base-package="com.doccomsa.task"/>
+	 -->
 	
 		
 </beans>
