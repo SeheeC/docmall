@@ -1,9 +1,11 @@
 package com.docmall.controller;
 
 import javax.inject.Inject;
+import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,13 +87,14 @@ public class MemberController {
 	//메일 인증 요청
 	@ResponseBody
 	@GetMapping("/sendMailAuth")
-	public ResponseEntity<String> sendMailAuth(@RequestParam("mbsp_email") String mbsp_email){
+	public ResponseEntity<String> sendMailAuth(@RequestParam("mbsp_email") String mbsp_email, HttpSession session){
 		
 		ResponseEntity<String> entity = null;
 		
 		String authCode = makeAuthCode();
+		session.setAttribute("authcode", authCode);
 		
-		EmailDTO dto = new EmailDTO("docmall", "doccomsa@nate.com", mbsp_email, "docmall 인증 메일", authCode);
+		EmailDTO dto = new EmailDTO("docmall", "shhh0009@gmail.com", mbsp_email, "docmall 인증 메일", authCode);
 		
 		MimeMessage message = mailSender.createMimeMessage();
 		
@@ -115,6 +118,24 @@ public class MemberController {
 		
 		return entity;
 	}
+	
+	//메일 인증 요청
+		@ResponseBody
+		@GetMapping("/MailAuthConfirm")
+		public ResponseEntity<String> MailAuthConfirm(@RequestParam("uAuthCode") String uAuthCode, HttpSession session){
+			
+			ResponseEntity<String> entity = null;
+			
+			String authCode = (String) session.getAttribute("authCode");
+			
+			if(authCode.equals(uAuthCode)) {
+				entity = new ResponseEntity<String>("success", HttpStatus.OK);
+			}else {
+				entity = new ResponseEntity<String>("fail", HttpStatus.OK);
+			}
+
+			return entity;
+		}
 	
 	// 회원 가입 시 메일 인증 코드 생성
 	private String makeAuthCode() {
