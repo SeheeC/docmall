@@ -47,7 +47,7 @@
   
   <!-- 회원가입 폼 작업 -->
   <h3>회원가입 폼</h3>
-  <form action="/member/join" method="post">
+  <form action="/member/join" method="post" id="joinForm">
   <div class="form-row">
     <div class="col-md-10">
 	    <label for="mbsp_id">아이디</label>
@@ -97,17 +97,16 @@
     <div class="col-md-4">
       <label for="mbsp_deaddr">나머지주소</label>
       <input type="text" class="form-control" id="mbsp_deaddr" name="mbsp_deaddr">
-      <input type="hidden" id="sample2_extraAddress" placeholder="참고항목" >
+      <input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
     </div>
     <div class="col-md-2">
       <label for="mbsp_zipcode">우편번호</label>
       <input type="text" class="form-control" id="mbsp_zipcode" name="mbsp_zipcode">
     </div>
     <div class="col-md-2">
-      <label for="mbsp_zipcode">&nbsp;</label>
-      <input type="button" class="form-control" id="btnPostCode" name="btnPostCode" onclick="sample2_execDaumPostcode()" value="우편번호 찾기">
+      <label for="btnPostCode">&nbsp;</label>
+      <input type="button" class="form-control" id="btnPostCode" name="btnPostCode"  value="우편번호찾기" onclick="sample2_execDaumPostcode()">
     </div>
-
    </div>
    
    <div class="form-group">
@@ -119,7 +118,7 @@
     <input type="checkbox" class="form-check-input" id="mbsp_receive" name="mbsp_receive" value="Y">
     <label class="form-check-label" for="mbsp_receive">메일수신여부</label>
   </div>
-  <button type="submit" class="btn btn-primary">회원가입</button>
+  <button type="submit" id="btnJoin" class="btn btn-primary">회원가입</button>
 </form>
   
   
@@ -131,9 +130,51 @@
 
   $(document).ready(function(){
 
+    //아이디중복체크 
+    let isCheckID = false;
+
+    //메일인증확인체크
+    let isMailAuthConfirm = false;
+    //폼에서 전송버튼<input type="submit">을 클릭하면 호출되는 이벤트설정
+    $("#joinForm").on("submit", function(){
+      //alert("호출");
+      
+      console.log("아이디중복체크? " + isCheckID)
+
+      if(isCheckID == false){
+        alert("아이디 중복체크 확인바람");
+        $("#mbsp_id").focus();
+        return false;
+      }
+
+      if(isMailAuthConfirm == false){
+        alert("메일인증요청 확인바람");
+        $("#btnMailAuthReq").focus();
+        return false;
+      }
+ 
+      // 전송이 이루어진다.
+    });
+
+    //폼에서 일반버튼<input type="button">을 클릭하면 호출되는 이벤트설정
+    /*
+    $("#btnJoin").on("click", function(){
+      alert("버튼 클릭됨");
+      return;
+
+      //로직이 틀리면 nothing
+      
+      //로직이 맞으면 전송가능
+      $("#joinForm").submit();
+
+    });
+    */
+
+
+
     //아이디중복체크
     $("#btnUseIDChk").on("click", function(){
-
+      isCheckID = false;
       let mbsp_id = $("#mbsp_id");
 
       if(mbsp_id.val() == "" || mbsp_id.val() == null){
@@ -151,6 +192,7 @@
           
           $("#idUseState").css("color","red");
           if(data == "Y"){
+            isCheckID = true;
             $("#idUseState").html("아이디 사용가능");
           }else if(data == "N"){
             mbsp_id.val("");
@@ -163,7 +205,7 @@
 
     //메일인증요청
     $("#btnMailAuthReq").on("click", function(){
-
+      isMailAuthConfirm = false;
       let mbsp_email = $("#mbsp_email");
 
       if(mbsp_email.val() == "" || mbsp_email.val() == null){
@@ -180,38 +222,40 @@
         success: function(data){
           
           if(data == "success"){
+            isMailAuthConfirm = true;
             alert("인증요청 메일발송됨.");
           }else if(data == "fail"){
-        	  alert("인증요청 메일발송 에러.");
+        	alert("인증요청 메일발송 에러.");
           }
         }
       });
     });
 
-    // 메일 인증 요청 확인
+    //메일인증확인
     $("#btnMailAuthConfirm").on("click", function(){
+
       let auth_mail = $("#auth_mail");
 
       if(auth_mail.val() == "" || auth_mail.val() == null){
-        alert("인증 코드를 입력하세요.");
+        alert("인증코드를 입력하세요.");
         auth_mail.focus();
         return;
       }
 
       $.ajax({
-        url: '/member/MailAuthConfirm',
+        url: '/member/mailAuthConfirm',
         type: 'get',
         dataType: 'text',
         data: { uAuthCode : auth_mail.val() },
         success: function(data){
           
           if(data == "success"){
-            alert("인증 성공.");
+            alert("인증요청 성공.");
           }else if(data == "fail"){
-            alert("인증 실패. \n 인증 요청 다시 시도하시길 바랍니다.");
+            alert("인증요청 실패\n 인증코드를 다시 입력하세요. 또는 인증요청을 다시 하기바랍니다.");
             auth_mail.val("");
           }
-        }
+        } 
       });
     });
 
@@ -220,10 +264,11 @@
 
 </script>
 
+<!--우폅번호 DAUM API-->
 <!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
 <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
   <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
-  </div>
+</div>
   
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
@@ -313,7 +358,6 @@
           element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
       }
   </script>
-
 
 
     

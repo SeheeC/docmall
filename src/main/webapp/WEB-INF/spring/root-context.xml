@@ -27,7 +27,7 @@
 		<property name="password" value="1234" />
 	</bean>
 	
-	<!-- 오라클서버와 연결 -->
+	<!-- 오라클서버와 연결 테스트-->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<constructor-arg ref="hikariConfig" />
 		
@@ -45,9 +45,8 @@
 
 	<tx:annotation-driven />
 	
-	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	
+
 	<!-- AOP 관련설정 -->
 	<!-- 
 	<context:annotation-config></context:annotation-config>
@@ -55,31 +54,27 @@
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	 -->
 	
-	 
+	
 	<mybatis-spring:scan base-package="com.docmall.mapper"/>
 	<context:component-scan base-package="com.docmall.service"/>
-	 
+	
 	<!-- 스케줄링 작업을 위한 설정 -->
 	<!-- 
 	<task:annotation-driven/>
 	<context:component-scan base-package="com.doccomsa.task"/>
 	 -->
-	 
-	<!-- javax.mail.internet.MimeMessage 를 사용하기위하여 필요함. 메일내용을 담당-->
-	<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
-	<!-- https://myaccount.google.com/security : 보안 수준이 낮은 앱 액세스 허용 설정 -->
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="실제 아디" />
-		<property name="password" value="실제 비번" />
+	 <!-- 지메일 이용시 보안수준 설정을 해야한다. https://myaccount.google.com/security : 보안수준이 낮은 앱 액세스 허용설정 -->
+	 <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	 	<property name="host"  value="smtp.gmail.com" />
+		<property name="port" value="587"></property>
+		<property name="username" value="doccomsa69@gmail.com"></property>
+		<property name="password" value=""></property>
 		<property name="javaMailProperties">
-		<props>
-			<prop key="mail.smtp.auth">true</prop>
-			<prop key="mail.smtp.starttls.enable">true</prop>
-		</props>
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
 		</property>
-	</bean>
-
+	 </bean>
 		
 </beans>
